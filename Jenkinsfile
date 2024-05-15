@@ -4,15 +4,16 @@ pipeline {
         stage('Checkout Code') {
             steps {
 				echo "Checkout"
-				// git branch: 'main', url: 'https://github.com/RockPiryt/FlaskAppJenkinsSample.git'
+				//git branch: 'main', url: 'https://github.com/kss7/SmartFlaskAPP.git'
 				sh 'ls -l'
             }
         }
      stage('Unit Tests') {
            steps {
 				echo "Unit Tests"
-                // sh('chmod +x ./jenkinsscript.sh')
-				sh('bash ./test_script.sh')
+				//sh(returnStatus: true, script: '. ~/.bashrc \n pyenv version')
+				//sh('chmod +x ./jenkinsscript.sh')
+				sh('bash ./jenkinsscript.sh')
           }
         }
 	stage("Publish Junit report") {
