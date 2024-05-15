@@ -11,8 +11,8 @@ pipeline {
      stage('Unit Tests') {
            steps {
 				echo "Unit Tests"
-                sh('chmod +x ./jenkinsscript.sh')
-				sh('bash ./jenkinsscript.sh')
+                // sh('chmod +x ./jenkinsscript.sh')
+				sh('bash ./test_script.sh')
           }
         }
 	stage("Publish Junit report") {
