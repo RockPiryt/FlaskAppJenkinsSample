@@ -1,14 +1,14 @@
 from main import db, bcrypt
 from datetime import datetime
 from marshmallow import fields, Schema, validate
-
+from sqlalchemy import func
 
 class User(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.String, unique=True, nullable=False)
-    hashed_password = db.Column(db.Binary(80), nullable=False)
+    hashed_password = db.Column(db.LargeBinary(80), nullable=False)
     authenticated = db.Column(db.Boolean, default=False)
     registered_on = db.Column(db.DateTime, nullable=True)
     role = db.Column(db.String, default='user')
@@ -34,9 +34,9 @@ class User(db.Model):
     def is_active(self):
         return True
 
-    @property
-    def is_anonymous(self):
-        return False
+    #@property
+    #def is_anonymous(self):
+    #    return False
 
     def get_id(self):
         return str(self.id)

@@ -1,8 +1,8 @@
-from flask import jsonify, request, session
+from flask import jsonify, request, Blueprint
 import json
+from flask_login import login_user, current_user, login_required, logout_user
 from main.models import User, UserSchema
 from main import db
-from flask import Blueprint
 blueprint = Blueprint('users', __name__)
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
@@ -10,16 +10,16 @@ users_schema = UserSchema(many=True)
 ############## routes #################
 @blueprint.route('/', methods=['GET', 'POST'])
 def index():
-    if 'email' in session:
-        username = session['email']
-        return jsonify({'message': 'You are already logged in', 'username': username})
-    else:
+    #if 'email' in session:
+    #    username = session['email']
+    #   return jsonify({'message': 'You are already logged in', 'username': username})
+    #else:
         resp = jsonify({'message': 'Unauthorized access, please login'})
         resp.status_code = 401
         return resp
 
 
-@blueprint.route('/register', methods=['POST'])
+@blueprint.route('/register', methods=['GET', 'POST'])
 def register():
     info = json.loads(request.data)
     email = info.get('email')
@@ -32,6 +32,7 @@ def register():
     else:
         db.session.add(user)
         db.session.commit()
+        login_user(user)
         return jsonify(user.to_json()), 201
 
 
@@ -44,7 +45,8 @@ def login():
             user.authenticated = True
             db.session.add(user)
             db.session.commit()
-            return jsonify({"status": 200, "msg": user.email + " logged in"})
+            login_user(user)
+            return jsonify({"status": 200, "msg": user.email + " logged in", "userId": str(user.id)})
         else:
             return jsonify({"status": 401,
                             "reason": "Username or Password not exists"}), 401
@@ -73,7 +75,7 @@ def get_all_users_count():
 def check_total_employee(auth=None, all=None):
     auth_count = auth or User.get_auth_user_count()
     all_count = all or User.get_all_users_count()
-    if auth_count > all_count:
+    if auth_count > 100:
         return jsonify({"auth_count": auth_count, "all_count":all_count,
                             "msg": "Error! Auth emp count is more than employees"})
     elif auth_count < all_count:
