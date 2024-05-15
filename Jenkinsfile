@@ -4,7 +4,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
 				echo "Checkout"
-				git branch: 'main', url: 'https://github.com/RockPiryt/FlaskAppJenkinsSample.git'
+				// git branch: 'main', url: 'https://github.com/RockPiryt/FlaskAppJenkinsSample.git'
 				sh 'ls -l'
             }
         }
