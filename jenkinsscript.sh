@@ -13,7 +13,7 @@ pip install -r ./requirements.txt
 pip install pytest-cov
 
 echo '#### Run tests ####'
-pytest --cov=main utests --junitxml=./xmlReport/output.xml
+pytest --cov=master utests --junitxml=./xmlReport/output.xml
 python -m coverage xml
 
 echo '### deactivate virtual environment ###'
